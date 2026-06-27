@@ -51,7 +51,7 @@ def find_post(id):
 def find_index_post(id):
     for i, post in enumerate(my_posts):
         if post["id"] == id:
-            return i        
+            return i             
 
 # CRUD Operations
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
@@ -63,9 +63,11 @@ def create_post(post: Post):
     return {"data": post_dict}
 
 @app.get("/posts")
-def get_post():
+def get_posts():
+    cursor.execute('SELECT * FROM "Posts"')
+    posts = cursor.fetchall()
     return {
-        "data" : my_posts
+        "data" : posts
     }
 
 @app.get("/posts/latest")
