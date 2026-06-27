@@ -56,11 +56,19 @@ def find_index_post(id):
 # CRUD Operations
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_post(post: Post):
-    post_dict = post.dict()
-    post_dict["id"] = randrange(0, 100000)
-    my_posts.append(post_dict)
+    cursor.execute(
+        """
+        INSERT INTO posts (title, content, published)
+        VALUES (%s, %s, %s)
+        RETURNING *;
+        """,
+        (post.title, post.content, post.published)
+    )
 
-    return {"data": post_dict}
+    new_post = cursor.fetchone()
+    conn.commit()
+
+    return {"data": new_post}
 
 @app.get("/posts")
 def get_posts():
