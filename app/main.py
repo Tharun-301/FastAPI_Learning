@@ -72,7 +72,7 @@ def create_post(post: Post):
 
 @app.get("/posts")
 def get_posts():
-    cursor.execute('SELECT * FROM "Posts"')
+    cursor.execute("SELECT * FROM posts")
     posts = cursor.fetchall()
     return {
         "data" : posts
@@ -84,18 +84,26 @@ def get_latest_post():
 
 # Retrieve one post
 @app.get("/posts/{id}")
-def get_post(id : int):
-    post = find_post(id)
+def get_post(id: int):
 
-    if not post:
+    cursor.execute(
+        """
+        SELECT * FROM posts
+        WHERE id = %s
+        """,
+        (id,)
+    )
+
+    post = cursor.fetchone()
+
+    if post is None:
         raise HTTPException(
-            status_code = status.HTTP_404_NOT_FOUND,
-            detail = f"Post with id {id} not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Post with id {id} not found"
         )
-    
-    return {
-        "data" : post
-    }
+
+    return {"data": post}
+
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id: int):
