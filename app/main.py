@@ -14,24 +14,6 @@ class Post(BaseModel):
 def read_root():
     return {"Message": "Welcome to FastAPI"}
 
-# @app.get("/posts")
-# def get_posts():
-#     return {"data": "All posts"}
-
-# @app.get("/posts/latest")
-# def get_latest_post():
-#     return {"Message":"Latest Post"}
-
-# @app.get("/posts/{id}")
-# def get_post(id: int):
-#     return {"post_id": id}
-
-# @app.post("/posts")
-# def create_post(post : Post):
-#     return {
-#         "Data": post
-#     }
-
 my_posts = [
     {"title": "Post 1", "content": "Content 1", "id": 1},
     {"title": "Food", "content": "Biryani", "id": 2},
